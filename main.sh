@@ -1,6 +1,6 @@
 #!/bin/bash
-source ./create.sh
-source ./drop.sh
+source /usr/local/bin/support_cli/create.sh
+source /usr/local/bin/support_cli/drop.sh
 
 #Этот скрипт позволяет создавать и удалять различные ресурсы Yandex Cloud.
 #Это нужно для саппортов, чтобы облегчить им жизнь
