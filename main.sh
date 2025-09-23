@@ -41,7 +41,7 @@ create() {
     while [ $# -gt 0 ]; do
         case "$1" in
             -v|--vm)
-                create_vm
+                create_instance
                 has_flags=true
                 ;;
             -p|--postgresql)
@@ -80,11 +80,7 @@ unknow_command() {
 }
 
 
-#------- создание ресурсов
 
 
-
-
-
-
+#Запуск функции
 main "$@"

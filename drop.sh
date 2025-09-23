@@ -1,33 +1,28 @@
 #!/bin/bash
-
+source /usr/local/bin/support_cli/file_modules.sh
 
 
 
 drop() {
     # Временный файл для хранения сетей (удаляем после подсетей)
     local temp_network_file=$(mktemp)
+
+    #-----------------------------------------
+    #Обработка удаления ВМ и подсети раньше всего РЕАЛИЗОВАТЬ
+    #------------------------------------------
+
     
     while IFS=' ' read -r resource id; do
         case $resource in
-            "subnet")
-                drop_subnet "$id"
+            "vpn")
+                drop_network
                 ;;
-            "vpn"|"network")  # Добавил network на случай опечатки
-                echo "network $id" >> "$temp_network_file"
-                ;;
+
         esac
-    done < .condition
-    
-    # Удаляем сети после подсетей
-    if [[ -f "$temp_network_file" ]]; then
-        while IFS=' ' read -r resource id; do
-            drop_network "$id"
-        done < "$temp_network_file"
-        rm -f "$temp_network_file"
-    fi
+    done < /usr/local/bin/support_cli/.condition
     
     # Очищаем файл .condition
-    > .condition  # Правильный способ очистки файла
+    > /usr/local/bin/support_cli/.condition 
 }
 
 
@@ -42,4 +37,11 @@ drop_subnet() {
     local id="$1"
     yc vpc subnet delete "$id"
     echo "Удалена подсеть $id"
+}
+
+
+drop_instance() {
+    local id="$1"
+    yc compute instance delete "$id"
+    echo "Удалена ВМ $id"
 }

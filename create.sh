@@ -1,48 +1,78 @@
 #!/bin/bash
-
+source /usr/local/bin/support_cli/file_modules.sh
 
 network_name="support_network"
 subnet_name="support_subnet"
-
-create_vm() {
-    create_network
-}
-
+cond_file="/usr/local/bin/support_cli/.condition"
 
 
 create_network() {
 
+
+    if states_has "vpn"; then 
+        #echo "сеть уже создана"
+        id=$(get_resource_on_id "vpn")
+        create_subnet "$id"
+        return 0
+    fi
+
+    echo "Сеть создается"
+
     #создание сети
     local response=$(yc vpc network create --name "$network_name")
     local id=$(get_id "$response")
-    echo "vpn $id" >> .condition
+    echo "vpn $id" >> "$cond_file"
     echo "Создана сеть $id"
 
-    #Создание подсети
+    create_subnet "$id"
+}
+
+
+
+create_subnet () {
+
+    network_id="$1"
+
+    if states_has "subnet"; then 
+        #echo "подсеть уже создана"
+        return 0
+    fi
+
+    echo "Подсеть создается"
+
+
     local response=$(yc vpc subnet create \
                         --name "$subnet_name" \
                         --zone ru-central1-a\
-                        --network-id "$id"\
+                        --network-id "$network_id"\
                         --range 192.168.0.0/24)
     local id=$(get_id "$response")
-    echo "subnet $id" >> .condition
+    echo "subnet $id" >> "$cond_file"
     echo "Создана подсеть $id"
 }
 
 
 
 create_instance() {
-    local response=$(yc vpc network create --name "$network_name")
-    local id=$(get_id "$response")
-    echo "instance $id" >> .condition
+    create_network
+
+    id=$(get_resource_on_id "subnet")
+
+    echo "ВМ создается"
+
+    trash=$(yc compute instance create \
+        --name ubuntu-vm \
+        --zone ru-central1-a \
+        --network-interface subnet-id=$id,ipv4-address=auto \
+        --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-2204-lts \
+        --memory 4GB \
+        --cores 2 \
+        --core-fraction 20 \
+        --preemptible \
+        --ssh-key ~/.ssh/support_cli_key.pub)
+    
+
+    echo "instance $id" >> "$cond_file"
     echo "Создана ВМ $id"
 }
 
-
-
-
-
-get_id() {
-    local response="$1" 
-    echo "$response" | awk '$1 == "id:" {print $2}'
-}
