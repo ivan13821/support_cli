@@ -22,6 +22,8 @@ states_has() {
 
 
 get_resource_on_id() {
+    #Возвращает id ресурса 
+
     local resource="$1" 
 
     awk -v resource="$resource" '$1 == resource {print $2; exit}' "$cond_file"

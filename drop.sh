@@ -7,15 +7,34 @@ drop() {
     # Временный файл для хранения сетей (удаляем после подсетей)
     local temp_network_file=$(mktemp)
 
-    #-----------------------------------------
-    #Обработка удаления ВМ и подсети раньше всего РЕАЛИЗОВАТЬ
-    #------------------------------------------
+    
+    while IFS=' ' read -r resource id; do
+        case $resource in
+            "instance")
+                drop_instance $(get_resource_on_id "instance")
+                ;;
+
+        esac
+    done < /usr/local/bin/support_cli/.condition
+
+    while IFS=' ' read -r resource id; do
+        case $resource in
+            "subnet")
+                drop_subnet $(get_resource_on_id "subnet")
+                ;;
+
+        esac
+    done < /usr/local/bin/support_cli/.condition
+
+
+
+
 
     
     while IFS=' ' read -r resource id; do
         case $resource in
             "vpn")
-                drop_network
+                drop_network $(get_resource_on_id "vpn")
                 ;;
 
         esac
@@ -26,8 +45,13 @@ drop() {
 }
 
 
+
+
+
+
 drop_network() {
     local id="$1"
+    echo "Удаляется сеть $id"
     yc vpc network delete "$id"
     echo "Удалена сеть $id"
 }
@@ -35,6 +59,7 @@ drop_network() {
 
 drop_subnet() {
     local id="$1"
+    echo "Удаляется подсеть $id"
     yc vpc subnet delete "$id"
     echo "Удалена подсеть $id"
 }
@@ -42,6 +67,7 @@ drop_subnet() {
 
 drop_instance() {
     local id="$1"
+    echo "Удаляется ВМ $id"
     yc compute instance delete "$id"
     echo "Удалена ВМ $id"
 }

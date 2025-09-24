@@ -56,20 +56,22 @@ create_subnet () {
 create_instance() {
     create_network
 
-    id=$(get_resource_on_id "subnet")
+    subnet_id=$(get_resource_on_id "subnet")
 
     echo "ВМ создается"
 
-    trash=$(yc compute instance create \
+    local response=$(yc compute instance create \
         --name ubuntu-vm \
         --zone ru-central1-a \
-        --network-interface subnet-id=$id,ipv4-address=auto \
+        --network-interface subnet-id=$subnet_id,nat-ip-version=ipv4 \
         --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-2204-lts \
         --memory 4GB \
         --cores 2 \
         --core-fraction 20 \
         --preemptible \
         --ssh-key ~/.ssh/support_cli_key.pub)
+    
+    local id=$(get_id "$response")
     
 
     echo "instance $id" >> "$cond_file"
