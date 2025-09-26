@@ -1,47 +1,28 @@
 #!/bin/bash
 source /usr/local/bin/support_cli/file_modules.sh
 
+#Массив ресурсов по приоритету (макс -> мин)
+resourses_prior=("instance" "subnet" "vpn")
+
 
 
 drop() {
-    # Временный файл для хранения сетей (удаляем после подсетей)
-    local temp_network_file=$(mktemp)
-
+    #Удаляет ресурсы по их приоритету
     
-    while IFS=' ' read -r resource id; do
-        case $resource in
-            "instance")
-                drop_instance $(get_resource_on_id "instance")
-                ;;
+    for res in "${resourses_prior[@]}"; do
+        
+        while IFS=' ' read -r resource id; do
+            
+            if [[ $resource == $res ]]; then
+                $res "$id"
+            fi
+            
+        done < /usr/local/bin/support_cli/.condition
+    done
 
-        esac
-    done < /usr/local/bin/support_cli/.condition
-
-    while IFS=' ' read -r resource id; do
-        case $resource in
-            "subnet")
-                drop_subnet $(get_resource_on_id "subnet")
-                ;;
-
-        esac
-    done < /usr/local/bin/support_cli/.condition
-
-
-
-
-
-    
-    while IFS=' ' read -r resource id; do
-        case $resource in
-            "vpn")
-                drop_network $(get_resource_on_id "vpn")
-                ;;
-
-        esac
-    done < /usr/local/bin/support_cli/.condition
-    
-    # Очищаем файл .condition
+    #Очистка файла
     > /usr/local/bin/support_cli/.condition 
+
 }
 
 
@@ -49,7 +30,9 @@ drop() {
 
 
 
-drop_network() {
+vpn() {
+    #Функция для удаления сети
+
     local id="$1"
     echo "Удаляется сеть $id"
     yc vpc network delete "$id"
@@ -57,7 +40,9 @@ drop_network() {
 }
 
 
-drop_subnet() {
+subnet() {
+    #Функция для удаления подсети
+    
     local id="$1"
     echo "Удаляется подсеть $id"
     yc vpc subnet delete "$id"
@@ -65,7 +50,9 @@ drop_subnet() {
 }
 
 
-drop_instance() {
+instance() {
+    #Функция для удаления ВМ
+
     local id="$1"
     echo "Удаляется ВМ $id"
     yc compute instance delete "$id"

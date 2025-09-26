@@ -19,7 +19,7 @@ create_network() {
     echo "Сеть создается"
 
     #создание сети
-    local response=$(yc vpc network create --name "$network_name")
+    local response=$(yc vpc network create --name "support_network-$RANDOM")
     local id=$(get_id "$response")
     echo "vpn $id" >> "$cond_file"
     echo "Создана сеть $id"
@@ -42,7 +42,7 @@ create_subnet () {
 
 
     local response=$(yc vpc subnet create \
-                        --name "$subnet_name" \
+                        --name "support_subnet-$RANDOM" \
                         --zone ru-central1-a\
                         --network-id "$network_id"\
                         --range 192.168.0.0/24)
@@ -61,7 +61,7 @@ create_instance() {
     echo "ВМ создается"
 
     local response=$(yc compute instance create \
-        --name ubuntu-vm \
+        --name "sup-vm-$RANDOM" \
         --zone ru-central1-a \
         --network-interface subnet-id=$subnet_id,nat-ip-version=ipv4 \
         --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-2204-lts \
