@@ -29,6 +29,9 @@ main() {
     else
         unknow_command
     fi
+
+    #очистка кэша
+    > "/usr/local/bin/support_cli/.states"
 }
 
 

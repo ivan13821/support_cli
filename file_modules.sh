@@ -12,6 +12,7 @@ get_id() {
 
 states_has() {
     local resource="$1" 
+    local cond_file="$2"
     if grep -q "^${resource} " "$cond_file"; then
         return 0  # true - ресурс найден
     else
@@ -25,6 +26,7 @@ get_resource_on_id() {
     #Возвращает id ресурса 
 
     local resource="$1" 
+    local cond_file="$2"
 
     awk -v resource="$resource" '$1 == resource {print $2; exit}' "$cond_file"
 }
