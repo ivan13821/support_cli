@@ -11,6 +11,7 @@ cond_file="/usr/local/bin/support_cli/.condition"
 
 create_instance() {
 
+    family="$1"
 
     local id_subnet=$(get_subnet_id)
 
@@ -20,7 +21,7 @@ create_instance() {
         --name "sup-vm-$RANDOM" \
         --zone ru-central1-a \
         --network-interface "subnet-id=$id_subnet,nat-ip-version=ipv4" \
-        --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-2204-lts,auto-delete=true \
+        --create-boot-disk "image-folder-id=standard-images,image-family=$family,auto-delete=true" \
         --memory 4GB \
         --cores 2 \
         --core-fraction 20 \
@@ -31,9 +32,19 @@ create_instance() {
     
     
     local id=$(get_id "$response")
+    local ip=$(get_ip "$id")
+
+    if [[ $family == "nat-instance-ubuntu" ]]; then
+        create_route_table "$ip"
+    fi
     
 
     echo "instance $id" >> "$cond_file"
     echo "Создана ВМ $id" >&2
+
+    echo ""
+    echo "Для подключения к ВМ используйте команду:"
+    echo "ssh -i ~/.ssh/support_cli_key yc-user@<ip>"
+    echo ""
 }
 

@@ -1,8 +1,9 @@
 #!/bin/bash
 source /usr/local/bin/support_cli/file_modules.sh
+source /usr/local/bin/support_cli/subres.sh
 
 #Массив ресурсов по приоритету (макс -> мин)
-resourses_prior=("instance" "subnet" "vpn")
+resourses_prior=("route_table" "instance" "subnet" "vpn")
 
 
 
@@ -57,4 +58,24 @@ instance() {
     echo "Удаляется ВМ $id"
     yc compute instance delete "$id"
     echo "Удалена ВМ $id"
+}
+
+
+route_table() {
+    #Функция для удаления таблицы маршрутизации
+
+    local table_id="$1"
+    echo "Таблица маршрутизации отвязывается"
+
+    #Отвязываем все таблицы маршрутизации
+    while IFS=' ' read -r resource id; do
+            
+        if [[ $resource == "subnet" ]]; then
+            local trash=$(yc vpc subnet update $id --disassociate-route-table)
+        fi
+            
+    done < /usr/local/bin/support_cli/.condition
+    echo "Удаляется таблица маршрутизации $table_id"
+    yc vpc route-table delete $table_id
+    echo "Таблица маршрутизации удалена"
 }

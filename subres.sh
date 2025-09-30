@@ -64,3 +64,32 @@ create_subnet () {
 
     echo "Создана подсеть $id" >&2
 }
+
+
+
+create_route_table() {
+    #Создает таблицу маршрутизации и привязывает ее к нужному ip
+
+    local ip="$1"
+
+    echo "Создается таблица маршрутизации" >&2
+
+    local response=$(yc vpc route-table create \
+        --name="support-$RANDOM" \
+        --network-id="$(get_network_id)" \
+        --route destination=0.0.0.0/0,next-hop="$ip")
+    
+    local id=$(get_id "$response")
+
+    echo "Создана таблица маршрутизации $id" >&2
+
+    echo "Таблица маршрутизации привязывается к сети" >&2
+
+    local trash=$(yc vpc subnet update $(get_subnet_id) \
+        --route-table-id "$id")
+
+    echo "Таблица маршрутизации успешно привязана" >&2
+
+    echo "route_table $id" >> "/usr/local/bin/support_cli/.condition"
+    echo "route_table $id" >> "/usr/local/bin/support_cli/.states"
+}
