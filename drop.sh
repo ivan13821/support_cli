@@ -3,7 +3,7 @@ source /usr/local/bin/support_cli/file_modules.sh
 source /usr/local/bin/support_cli/subres.sh
 
 #Массив ресурсов по приоритету (макс -> мин)
-resourses_prior=("route_table" "instance" "subnet" "vpn")
+resourses_prior=("route_table" "instance" "postgresql" "subnet" "vpn")
 
 
 
@@ -78,4 +78,16 @@ route_table() {
     echo "Удаляется таблица маршрутизации $table_id"
     yc vpc route-table delete $table_id
     echo "Таблица маршрутизации удалена"
+}
+
+
+postgresql() {
+    #Функция для удаления кластера PostgreSQL
+
+    local id="$1"
+
+    echo "Удаляется кластер PostgreSQL"
+    yc managed-postgresql cluster delete "$id"
+    echo "Кластер PosqtgreSQL удален"
+
 }

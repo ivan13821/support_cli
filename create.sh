@@ -28,7 +28,7 @@ create_instance() {
         --preemptible \
         --ssh-key ~/.ssh/support_cli_key.pub)
         
-    
+    echo "Создана ВМ $id" >&2
     
     
     local id=$(get_id "$response")
@@ -40,7 +40,7 @@ create_instance() {
     
 
     echo "instance $id" >> "$cond_file"
-    echo "Создана ВМ $id" >&2
+    
 
     echo ""
     echo "Для подключения к ВМ используйте команду:"
@@ -48,3 +48,51 @@ create_instance() {
     echo ""
 }
 
+
+
+
+create_bucket() {
+    
+    echo "Создается бакет"
+    yc storage bucket create --name "support-$RANDOM"
+    echo "Бакет создан"
+
+}
+
+
+
+
+
+
+
+
+create_postgresql() {
+
+    local password="$RANDOM$RANDOM$RANDOM"
+
+    echo "">&2
+    echo "Пароль для пользователя support для подключения к PostgreSQL $password" >&2
+    echo "">&2
+
+    echo "Создается кластер PosqtgreSQL"
+
+    local response=$(yc managed-postgresql cluster create \
+        --name "support-$RANDOM" \
+        --environment production \
+        --network-id "$(get_network_id)" \
+        --host zone-id=ru-central1-a,`
+                `subnet-id="$(get_subnet_id)",`
+                `assign-public-ip=true \
+        --resource-preset b1.medium \
+        --user "name=support,password=$password" \
+        --database name=supportDataBase,owner=support \
+        --disk-size 10 \
+        --disk-type network-ssd \
+        --deletion-protection)
+    
+    local id=$(get_id "$response")
+
+    echo "Кластер создан">&2
+
+    echo "postgresql $id" >> "$cond_file"
+}

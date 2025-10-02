@@ -43,20 +43,28 @@ create() {
 
     while [ $# -gt 0 ]; do
         case "$1" in
-            -v|--vm)
+            --ubuntu)
                 create_instance "ubuntu-2204-lts"
                 has_flags=true
                 ;;
-            -p|--postgresql)
-                echo "postgresql"
+            --debian)
+                create_instance "debian-9"
                 has_flags=true
                 ;;
-            -c|--clickhouse)
+            --postgresql)
+                create_postgresql
+                has_flags=true
+                ;;
+            --clickhouse)
                 echo "clickhouse"
                 has_flags=true
                 ;;
             --nat)
                 create_instance "nat-instance-ubuntu"
+                has_flags=true
+                ;;
+            --bucket)
+                create_bucket
                 has_flags=true
                 ;;
             --help)
