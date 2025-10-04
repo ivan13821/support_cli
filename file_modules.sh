@@ -49,3 +49,14 @@ get_ip() {
     local response="$(yc compute instance get $id)"
     echo "$response" | awk '/primary_v4_address:/ {found=1} found && /address:/ {if(!ip) {ip=$2}} END {print ip}'
 }
+
+
+
+spinner() {
+    local spin='-\|/'
+    local i=0
+    while true; do
+        printf '\r%c' "${spin:i++%4:1}"
+        sleep 0.4
+    done
+}

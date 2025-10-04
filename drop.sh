@@ -3,7 +3,7 @@ source /usr/local/bin/support_cli/file_modules.sh
 source /usr/local/bin/support_cli/subres.sh
 
 #Массив ресурсов по приоритету (макс -> мин)
-resourses_prior=("route_table" "instance" "postgresql" "subnet" "vpn")
+resourses_prior=("route_table" "instance" "postgresql" "mysql" "clickhouse" "subnet" "vpn")
 
 
 
@@ -90,4 +90,28 @@ postgresql() {
     yc managed-postgresql cluster delete "$id"
     echo "Кластер PosqtgreSQL удален"
 
+}
+
+
+
+mysql() {
+    #Функция для удаления кластера MySQL
+
+    local id="$1"
+
+    echo "Удаляется кластер MySQL"
+    yc managed-mysql cluster delete "$id"
+    echo "Кластер MySQL удален"
+}
+
+
+
+clickhouse() {
+    #Функция для удаления кластера ClickHouse
+
+    local id="$1"
+
+    echo "Удаляется кластер ClickHouse"
+    yc managed-clickhouse cluster delete "$id"
+    echo "Кластер ClickHouse удален"
 }
