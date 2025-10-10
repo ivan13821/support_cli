@@ -9,7 +9,7 @@ Support CLI - это инструмент командной строки, ко�
 1. Скачайте файл установки
 
 ```bash
-wget https://github.com/ivan13821/support_cli/tree/main/init.sh
+wget https://raw.githubusercontent.com/ivan13821/support_cli/main/init.sh
 ```
 ## Запустите установку
 
