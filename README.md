@@ -47,7 +47,7 @@ angel drop
 
 # 👥 Авторы
  - ivashka138
-
+<br>
 Сделано с ❤️ для Yandex Cloud
 
 <div align="center">
