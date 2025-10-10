@@ -57,7 +57,7 @@ ivashka138
 sudo bash init.sh
 ```
 
-Сделано с ❤️ для Yandex Cloud сообщества
+Сделано с ❤️ для Yandex Cloud
 
 <div align="center">
 ⭐ Не забудьте поставить звезду репозиторию, если проект вам помог!
