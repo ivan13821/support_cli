@@ -46,7 +46,7 @@ angel drop
 ```
 
 # 👥 Авторы
-**ivashka138**
+## ivashka138
 
 Сделано с ❤️ для Yandex Cloud
 
