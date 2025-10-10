@@ -21,6 +21,8 @@ wget https://raw.githubusercontent.com/ivan13821/support_cli/main/init.sh
 sudo bash init.sh
 ```
 
+<br>
+
 # 🛠 Возможности
 - ✅ Автоматическое развертывание инфраструктуры
 
