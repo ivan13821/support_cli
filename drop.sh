@@ -1,6 +1,6 @@
 #!/bin/bash
-source ~/support_cli/file_modules.sh
-source ~/support_cli/subres.sh
+source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/file_modules.sh
+source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/subres.sh
 
 #Массив ресурсов по приоритету (макс -> мин)
 resourses_prior=("route_table" "instance" "postgresql" "mysql" "clickhouse" "subnet" "vpn")
@@ -18,11 +18,11 @@ drop() {
                 $res "$id"
             fi
             
-        done < ~/support_cli/.condition
+        done < USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition
     done
 
     #Очистка файла
-    > ~/support_cli/.condition 
+    > USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition 
 
 }
 
@@ -74,7 +74,7 @@ route_table() {
             local trash=$(yc vpc subnet update $id --disassociate-route-table)
         fi
             
-    done < ~/support_cli/.condition
+    done < USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition
     echo "Удаляется таблица маршрутизации $table_id"
     yc vpc route-table delete $table_id
     echo "Таблица маршрутизации удалена"

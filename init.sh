@@ -21,14 +21,14 @@ run_command() {
 }
 
 # Создание SSH-ключа (если не существует)
-if [ ! -f ~/.ssh/support_cli_key ]; then
-    run_command "ssh-keygen -t rsa -b 4096 -f ~/.ssh/support_cli_key -N ''" "Создаю ssh-ключ"
+if [ ! -f USER_HOME=$(eval echo ~$SUDO_USER)/.ssh/support_cli_key ]; then
+    run_command "ssh-keygen -t rsa -b 4096 -f USER_HOME=$(eval echo ~$SUDO_USER)/.ssh/support_cli_key -N ''" "Создаю ssh-ключ"
 else
     echo "SSH-ключ уже существует, пропускаю создание"
 fi
 
 # Подготовка директории и клонирование
-run_command "check_and_create_dir '~/support_cli'" "Проверяю директорию"
+run_command "check_and_create_dir 'USER_HOME=$(eval echo ~$SUDO_USER)/support_cli'" "Проверяю директорию"
 
 cd /usr/local/bin
 run_command "rm -rf support_cli" "Очищаю старую версию"
@@ -45,7 +45,7 @@ if ! grep -q "angel()" $USER_HOME/.bashrc; then
         echo ""
         echo "#my-app for supports"
         echo "angel() {"
-        echo "    local script_path=\"~/support_cli/main.sh\""
+        echo "    local script_path=\"USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/main.sh\""
         echo "    "
         echo "    if [[ ! -f \"\$script_path\" ]]; then"
         echo "        echo \"Ошибка: Скрипт \$script_path не найден\" >&2"
@@ -60,5 +60,5 @@ else
     echo "Алиас уже настроен"
 fi
 
-source ~/.bashrc
+source USER_HOME=$(eval echo ~$SUDO_USER)/.bashrc
 echo "Успешно!!!"

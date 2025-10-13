@@ -1,6 +1,6 @@
 #!/bin/bash
-source ~/support_cli/create/main.sh
-source ~/support_cli/drop.sh
+source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/create/main.sh
+source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/drop.sh
 
 #Этот скрипт позволяет создавать и удалять различные ресурсы Yandex Cloud.
 #Это нужно для саппортов, чтобы облегчить им жизнь
@@ -31,7 +31,7 @@ main() {
     fi
 
     #очистка кэша
-    > "~/support_cli/.states"
+    > "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
 }
 
 

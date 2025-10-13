@@ -1,5 +1,5 @@
 #!/bin/bash
-source ~/support_cli/file_modules.sh
+source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/file_modules.sh
 
 
 
@@ -7,11 +7,11 @@ source ~/support_cli/file_modules.sh
 
 get_network_id () {
 
-    if ! states_has "vpn" "~/support_cli/.states"; then 
+    if ! states_has "vpn" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"; then 
         network_id=$(create_network)
     fi
 
-    echo "$(get_resource_on_id "vpn" "~/support_cli/.states")"
+    echo "$(get_resource_on_id "vpn" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states")"
 }
 
 
@@ -19,11 +19,11 @@ get_network_id () {
 
 get_subnet_id () {
 
-    if ! states_has "subnet" "~/support_cli/.states"; then 
+    if ! states_has "subnet" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"; then 
         subnet_id=$(create_subnet)
     fi
 
-    echo "$(get_resource_on_id "subnet" "~/support_cli/.states")"
+    echo "$(get_resource_on_id "subnet" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states")"
 }
 
 
@@ -39,8 +39,8 @@ create_network () {
     local response=$(yc vpc network create --name "support_network-$RANDOM")
     local id=$(get_id "$response")
     
-    echo "vpn $id" >> "~/support_cli/.condition"
-    echo "vpn $id" >> "~/support_cli/.states"
+    echo "vpn $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition"
+    echo "vpn $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
 
     echo "Создана сеть $id" >&2
 }
@@ -59,8 +59,8 @@ create_subnet () {
                         --range 192.168.0.0/24)
     local id=$(get_id "$response")
 
-    echo "subnet $id" >> "~/support_cli/.condition"
-    echo "subnet $id" >> "~/support_cli/.states"
+    echo "subnet $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition"
+    echo "subnet $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
 
     echo "Создана подсеть $id" >&2
 }
@@ -90,6 +90,6 @@ create_route_table() {
 
     echo "Таблица маршрутизации успешно привязана" >&2
 
-    echo "route_table $id" >> "~/support_cli/.condition"
-    echo "route_table $id" >> "~/support_cli/.states"
+    echo "route_table $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition"
+    echo "route_table $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
 }
