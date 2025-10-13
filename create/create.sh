@@ -1,13 +1,13 @@
 #!/bin/bash
-source /usr/local/bin/support_cli/file_modules.sh
-source /usr/local/bin/support_cli/subres.sh
+USER_HOME=$(eval echo ~$SUDO_USER)
+PROJECT_DIR="$USER_HOME/support_cli"
+
+source "$PROJECT_DIR/file_modules.sh"
+source "$PROJECT_DIR/subres.sh"
 
 network_name="support_network"
 subnet_name="support_subnet"
-cond_file="/usr/local/bin/support_cli/.condition"
-
-
-
+cond_file="$PROJECT_DIR/.condition"
 
 create_instance() {
     #Создает ВМ в зависимости от переданного образа
@@ -27,7 +27,7 @@ create_instance() {
         --cores 2 \
         --core-fraction 20 \
         --preemptible \
-        --ssh-key USER_HOME=$(eval echo ~$SUDO_USER)/.ssh/support_cli_key.pub)
+        --ssh-key $USER_HOME/.ssh/support_cli_key.pub)
         
     echo "Создана ВМ $id" >&2
     
@@ -45,12 +45,9 @@ create_instance() {
 
     echo ""
     echo "Для подключения к ВМ используйте команду:"
-    echo "ssh -i USER_HOME=$(eval echo ~$SUDO_USER)/.ssh/support_cli_key yc-user@<ip>"
+    echo "ssh -i $USER_HOME/.ssh/support_cli_key yc-user@<ip>"
     echo ""
 }
-
-
-
 
 create_bucket() {
     #Создает бакет
@@ -58,5 +55,4 @@ create_bucket() {
     echo "Создается бакет"
     yc storage bucket create --name "support-$RANDOM"
     echo "Бакет создан"
-
 }

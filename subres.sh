@@ -1,33 +1,24 @@
 #!/bin/bash
-source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/file_modules.sh
+USER_HOME=$(eval echo ~$SUDO_USER)
+PROJECT_DIR="$USER_HOME/support_cli"
 
-
-
-
+source "$PROJECT_DIR/file_modules.sh"
 
 get_network_id () {
-
-    if ! states_has "vpn" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"; then 
+    if ! states_has "vpn" "$PROJECT_DIR/.states"; then 
         network_id=$(create_network)
     fi
 
-    echo "$(get_resource_on_id "vpn" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states")"
+    echo "$(get_resource_on_id "vpn" "$PROJECT_DIR/.states")"
 }
 
-
-
-
 get_subnet_id () {
-
-    if ! states_has "subnet" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"; then 
+    if ! states_has "subnet" "$PROJECT_DIR/.states"; then 
         subnet_id=$(create_subnet)
     fi
 
-    echo "$(get_resource_on_id "subnet" "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states")"
+    echo "$(get_resource_on_id "subnet" "$PROJECT_DIR/.states")"
 }
-
-
-
 
 #Не вызывать отдельно!!!
 create_network () {
@@ -39,18 +30,15 @@ create_network () {
     local response=$(yc vpc network create --name "support_network-$RANDOM")
     local id=$(get_id "$response")
     
-    echo "vpn $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition"
-    echo "vpn $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
+    echo "vpn $id" >> "$PROJECT_DIR/.condition"
+    echo "vpn $id" >> "$PROJECT_DIR/.states"
 
     echo "Создана сеть $id" >&2
 }
 
-
 #Не вызывать отдельно!!!
 create_subnet () {
-
     echo "Подсеть создается" >&2
-
 
     local response=$(yc vpc subnet create \
                         --name "support_subnet-$RANDOM" \
@@ -59,13 +47,11 @@ create_subnet () {
                         --range 192.168.0.0/24)
     local id=$(get_id "$response")
 
-    echo "subnet $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition"
-    echo "subnet $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
+    echo "subnet $id" >> "$PROJECT_DIR/.condition"
+    echo "subnet $id" >> "$PROJECT_DIR/.states"
 
     echo "Создана подсеть $id" >&2
 }
-
-
 
 create_route_table() {
     #Создает таблицу маршрутизации и привязывает ее к нужному ip
@@ -90,6 +76,6 @@ create_route_table() {
 
     echo "Таблица маршрутизации успешно привязана" >&2
 
-    echo "route_table $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition"
-    echo "route_table $id" >> "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
+    echo "route_table $id" >> "$PROJECT_DIR/.condition"
+    echo "route_table $id" >> "$PROJECT_DIR/.states"
 }

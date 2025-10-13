@@ -1,11 +1,12 @@
 #!/bin/bash
-source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/file_modules.sh
-source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/subres.sh
+USER_HOME=$(eval echo ~$SUDO_USER)
+PROJECT_DIR="$USER_HOME/support_cli"
+
+source "$PROJECT_DIR/file_modules.sh"
+source "$PROJECT_DIR/subres.sh"
 
 #Массив ресурсов по приоритету (макс -> мин)
 resourses_prior=("route_table" "instance" "postgresql" "mysql" "clickhouse" "subnet" "vpn")
-
-
 
 drop() {
     #Удаляет ресурсы по их приоритету
@@ -18,18 +19,12 @@ drop() {
                 $res "$id"
             fi
             
-        done < USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition
+        done < "$PROJECT_DIR/.condition"
     done
 
     #Очистка файла
-    > USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition 
-
+    > "$PROJECT_DIR/.condition" 
 }
-
-
-
-
-
 
 vpn() {
     #Функция для удаления сети
@@ -40,7 +35,6 @@ vpn() {
     echo "Удалена сеть $id"
 }
 
-
 subnet() {
     #Функция для удаления подсети
     
@@ -50,7 +44,6 @@ subnet() {
     echo "Удалена подсеть $id"
 }
 
-
 instance() {
     #Функция для удаления ВМ
 
@@ -59,7 +52,6 @@ instance() {
     yc compute instance delete "$id"
     echo "Удалена ВМ $id"
 }
-
 
 route_table() {
     #Функция для удаления таблицы маршрутизации
@@ -74,12 +66,11 @@ route_table() {
             local trash=$(yc vpc subnet update $id --disassociate-route-table)
         fi
             
-    done < USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.condition
+    done < "$PROJECT_DIR/.condition"
     echo "Удаляется таблица маршрутизации $table_id"
     yc vpc route-table delete $table_id
     echo "Таблица маршрутизации удалена"
 }
-
 
 postgresql() {
     #Функция для удаления кластера PostgreSQL
@@ -89,10 +80,7 @@ postgresql() {
     echo "Удаляется кластер PostgreSQL"
     yc managed-postgresql cluster delete "$id"
     echo "Кластер PosqtgreSQL удален"
-
 }
-
-
 
 mysql() {
     #Функция для удаления кластера MySQL
@@ -103,8 +91,6 @@ mysql() {
     yc managed-mysql cluster delete "$id"
     echo "Кластер MySQL удален"
 }
-
-
 
 clickhouse() {
     #Функция для удаления кластера ClickHouse

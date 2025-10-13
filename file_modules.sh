@@ -1,23 +1,17 @@
-
-
-
-
-
+#!/bin/bash
+USER_HOME=$(eval echo ~$SUDO_USER)
+PROJECT_DIR="$USER_HOME/support_cli"
 
 get_id() {
     local response="$1" 
     echo "$response" | awk '$1 == "id:" {print $2}'
 }
 
-
-
 get_network_id_for_route_table() {
     local id="$1"
     local response="$(yc vpc route-table get $id)" 
     echo "$response" | awk '$1 == "network_id:" {print $2}'
 }
-
-
 
 states_has() {
     local resource="$1" 
@@ -29,8 +23,6 @@ states_has() {
     fi
 }
 
-
-
 get_resource_on_id() {
     #Возвращает id ресурса 
 
@@ -40,8 +32,6 @@ get_resource_on_id() {
     awk -v resource="$resource" '$1 == resource {print $2; exit}' "$cond_file"
 }
 
-
-
 get_ip() {
     #Возвращает ip адрес по идентификатору
 
@@ -49,8 +39,6 @@ get_ip() {
     local response="$(yc compute instance get $id)"
     echo "$response" | awk '/primary_v4_address:/ {found=1} found && /address:/ {if(!ip) {ip=$2}} END {print ip}'
 }
-
-
 
 spinner() {
     local spin='-\|/'

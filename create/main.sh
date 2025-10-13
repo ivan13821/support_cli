@@ -1,9 +1,9 @@
 #!/bin/bash
+USER_HOME=$(eval echo ~$SUDO_USER)
+PROJECT_DIR="$USER_HOME/support_cli"
 
-source /usr/local/bin/support_cli/create/create.sh
-source /usr/local/bin/support_cli/create/create_claster.sh
-
-
+source "$PROJECT_DIR/create/create.sh"
+source "$PROJECT_DIR/create/create_claster.sh"
 
 #Функция создает ресурс
 create() {

@@ -1,6 +1,10 @@
 #!/bin/bash
-source /usr/local/bin/support_cli/file_modules.sh
+USER_HOME=$(eval echo ~$SUDO_USER)
+PROJECT_DIR="$USER_HOME/support_cli"
 
+source "$PROJECT_DIR/file_modules.sh"
+
+cond_file="$PROJECT_DIR/.condition"
 
 get_username() {
     #Возвращает имя пользователя для кластера
@@ -11,7 +15,6 @@ get_database_name() {
     #Возвращает имя Базы данных
     echo "supportDataBase"
 }
-
 
 get_password() {
     #Возвращает набор чисел. Можно использовать как пароль
@@ -26,10 +29,6 @@ get_password() {
 
     echo "$password"
 }
-
-
-
-
 
 create_postgresql() {
     #Создает кластер PostgreSQL
@@ -60,9 +59,6 @@ create_postgresql() {
 
     echo "postgresql $id" >> "$cond_file"
 }
-
-
-
 
 create_mysql() {
     #Функция для создания кластера MySQL
@@ -95,11 +91,7 @@ create_mysql() {
     echo "Кластер MySQL создан">&2
 
     echo "mysql $id" >> "$cond_file"
-
 }
-
-
-
 
 create_clickhouse() {
     #Создает кластер ClickHouse

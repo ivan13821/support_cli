@@ -1,6 +1,9 @@
 #!/bin/bash
-source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/create/main.sh
-source USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/drop.sh
+USER_HOME=$(eval echo ~$SUDO_USER)
+PROJECT_DIR="$USER_HOME/support_cli"
+
+source "$PROJECT_DIR/create/main.sh"
+source "$PROJECT_DIR/drop.sh"
 
 #Этот скрипт позволяет создавать и удалять различные ресурсы Yandex Cloud.
 #Это нужно для саппортов, чтобы облегчить им жизнь
@@ -14,7 +17,6 @@ main() {
         echo "Ошибка: Первый аргумент не может быть пустым"
         return 0
     fi
-
 
     local command="$1"
     shift  # Убираем первый аргумент (create/drop)
@@ -31,20 +33,13 @@ main() {
     fi
 
     #очистка кэша
-    > "USER_HOME=$(eval echo ~$SUDO_USER)/support_cli/.states"
+    > "$PROJECT_DIR/.states"
 }
-
-
-
-
 
 #Вывод, если введен неверный аргумент
 unknow_command() {
     echo "К сожалению я не знаю такой команды. Убедитесь в правильности ее написания или введите --help"
 }
-
-
-
 
 #Запуск функции
 main "$@"
