@@ -27,7 +27,7 @@ create_instance() {
         --cores 2 \
         --core-fraction 20 \
         --preemptible \
-        --ssh-key ~/.ssh/support_cli_key.pub)
+        --ssh-key USER_HOME=$(eval echo ~$SUDO_USER)/.ssh/support_cli_key.pub)
         
     echo "Создана ВМ $id" >&2
     
@@ -45,7 +45,7 @@ create_instance() {
 
     echo ""
     echo "Для подключения к ВМ используйте команду:"
-    echo "ssh -i ~/.ssh/support_cli_key yc-user@<ip>"
+    echo "ssh -i USER_HOME=$(eval echo ~$SUDO_USER)/.ssh/support_cli_key yc-user@<ip>"
     echo ""
 }
 
