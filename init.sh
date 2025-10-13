@@ -28,7 +28,7 @@ else
 fi
 
 # Подготовка директории и клонирование
-run_command "check_and_create_dir '/usr/local/bin/support_cli'" "Проверяю директорию"
+run_command "check_and_create_dir '~/support_cli'" "Проверяю директорию"
 
 cd /usr/local/bin
 run_command "rm -rf support_cli" "Очищаю старую версию"
@@ -45,7 +45,7 @@ if ! grep -q "angel()" $USER_HOME/.bashrc; then
         echo ""
         echo "#my-app for supports"
         echo "angel() {"
-        echo "    local script_path=\"/usr/local/bin/support_cli/main.sh\""
+        echo "    local script_path=\"~/support_cli/main.sh\""
         echo "    "
         echo "    if [[ ! -f \"\$script_path\" ]]; then"
         echo "        echo \"Ошибка: Скрипт \$script_path не найден\" >&2"

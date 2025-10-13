@@ -1,6 +1,6 @@
 #!/bin/bash
-source /usr/local/bin/support_cli/create/main.sh
-source /usr/local/bin/support_cli/drop.sh
+source ~/support_cli/create/main.sh
+source ~/support_cli/drop.sh
 
 #Этот скрипт позволяет создавать и удалять различные ресурсы Yandex Cloud.
 #Это нужно для саппортов, чтобы облегчить им жизнь
@@ -31,7 +31,7 @@ main() {
     fi
 
     #очистка кэша
-    > "/usr/local/bin/support_cli/.states"
+    > "~/support_cli/.states"
 }
 
 
