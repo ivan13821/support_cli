@@ -49,7 +49,12 @@ create_postgresql() {
         --user "name=$(get_username),password=$(get_password "PosqtgreSQL")" \
         --database "name=supportDataBase,owner=$(get_username)" \
         --disk-size 10 \
-        --disk-type network-ssd)
+        --disk-type network-ssd \
+        --datalens-access \
+        --websql-access \
+        --serverless-access \
+        --datatransfer-access \
+        --yandexquery-access)
     
     local id=$(get_id "$response")
 
@@ -82,7 +87,11 @@ create_mysql() {
         --user "name=$(get_username),password=$(get_password 'MySQL')" \
         --database "name=$(get_database_name)" \
         --disk-size 10 \
-        --disk-type network-ssd)
+        --disk-type network-ssd \
+        --datalens-access \
+        --websql-access \
+        --datatransfer-access \
+        --yandexquery-access)
     
     local id=$(get_id "$response")
 
@@ -114,7 +123,12 @@ create_clickhouse() {
         --clickhouse-disk-size 10 \
         --user "name=$(get_username),password=$(get_password 'ClickHouse')" \
         --database "name=$(get_database_name)" \
-        --websql-access=true)
+        --websql-access=true \
+        --datalens-access \
+        --websql-access \
+        --serverless-access \
+        --datatransfer-access \
+        --yandexquery-access)
     
     local id=$(get_id "$response")
 
