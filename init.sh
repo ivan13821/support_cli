@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER_HOME=$(eval echo ~$SUDO_USER)
+USER_HOME="~"
 PROJECT_DIR="$USER_HOME/support_cli"
 
 check_and_create_dir() {

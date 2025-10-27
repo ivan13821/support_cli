@@ -1,5 +1,5 @@
 #!/bin/bash
-USER_HOME=$(eval echo ~$SUDO_USER)
+USER_HOME="~"
 PROJECT_DIR="$USER_HOME/support_cli"
 
 source "$PROJECT_DIR/create/main.sh"
