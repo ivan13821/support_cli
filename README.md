@@ -26,7 +26,7 @@ git clone https://github.com/ivan13821/support_cli
 nano ~/.bashrc
 ```
 
-3. Создайте алиас
+3. Вставьте алиас в конец файла ~/.bashrc
 ```bash
 #my-app for supports
 angel() {
