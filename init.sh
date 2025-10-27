@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USER_HOME="~"
+USER_HOME="$HOME"
 PROJECT_DIR="$USER_HOME/support_cli"
 
 check_and_create_dir() {

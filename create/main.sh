@@ -1,5 +1,5 @@
 #!/bin/bash
-USER_HOME="~"
+USER_HOME="$HOME"
 PROJECT_DIR="$USER_HOME/support_cli"
 
 source "$PROJECT_DIR/create/create.sh"
