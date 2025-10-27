@@ -14,15 +14,31 @@ Support CLI - это инструмент командной строки, ко�
 Скачать и настроить ее можно по <a href="https://yandex.cloud/ru/docs/cli/quickstart#install">инструкции</a>
 
 ## Установка
-1. Скачайте файл установки
+1. Скачайте проект в корневую папку пользователя
 
 ```bash
-wget https://raw.githubusercontent.com/ivan13821/support_cli/main/init.sh
+cd ~/
+git clone https://github.com/ivan13821/support_cli
 ```
-2. Запустите установку
+2. Зайдите в файл ~/.bashrc
 
 ```bash
-sudo bash init.sh
+nano ~/.bashrc
+```
+
+3. Создайте алиас
+```bash
+#my-app for supports
+angel() {
+    local script_path="/<Путь до корневой директории пользователя>/support_cli/main.sh"
+    
+    if [[ ! -f "$script_path" ]]; then
+        echo "Ошибка: Скрипт $script_path не найден" >&2
+        return 1
+    fi
+    
+    "$script_path" "$@"
+}
 ```
 
 <br>
