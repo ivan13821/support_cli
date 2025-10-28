@@ -15,6 +15,10 @@ drop() {
         
         while IFS=' ' read -r resource id; do
             
+            if [[ $id == "" ]]; then
+                continue
+            fi
+
             if [[ $resource == $res ]]; then
                 $res "$id"
             fi

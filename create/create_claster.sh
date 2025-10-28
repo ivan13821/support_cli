@@ -61,7 +61,7 @@ create_postgresql() {
     kill $SPINNER_PID
 
     echo "Кластер PosqtgreSQL создан">&2
-
+    
     echo "postgresql $id" >> "$cond_file"
 }
 

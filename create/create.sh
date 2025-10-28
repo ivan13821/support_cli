@@ -29,11 +29,10 @@ create_instance() {
         --preemptible \
         --ssh-key $USER_HOME/.ssh/support_cli_key.pub)
         
-    echo "Создана ВМ $id" >&2
     
     
     local id=$(get_id "$response")
-    local ip=$(get_ip "$id")
+    local ip=$(get_ip "$response")
 
     if [[ $family == "nat-instance-ubuntu" ]]; then
         create_route_table "$ip"
@@ -42,11 +41,16 @@ create_instance() {
 
     echo "instance $id" >> "$cond_file"
     
-
-    echo ""
-    echo "Для подключения к ВМ используйте команду:"
-    echo "ssh -i $USER_HOME/.ssh/support_cli_key yc-user@<ip>"
-    echo ""
+    if [[ $id != "" ]]; then
+        echo "Создана ВМ $id" >&2
+        echo ""
+        echo "Для подключения к ВМ используйте команду:"
+        echo "ssh -i $USER_HOME/.ssh/support_cli_key yc-user@$ip"
+        echo ""
+    else
+        echo "Ошибка при создании ВМ"
+    fi
+    
 }
 
 create_bucket() {

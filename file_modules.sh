@@ -35,9 +35,8 @@ get_resource_on_id() {
 get_ip() {
     #Возвращает ip адрес по идентификатору
 
-    local id="$1"
-    local response="$(yc compute instance get $id)"
-    echo "$response" | awk '/primary_v4_address:/ {found=1} found && /address:/ {if(!ip) {ip=$2}} END {print ip}'
+    local response="$1"
+    echo "$(echo "$response" | grep -A2 'one_to_one_nat:' | grep 'address:' | grep -oE '[0-9.]+')"
 }
 
 spinner() {
